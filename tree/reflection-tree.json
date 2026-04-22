@@ -1,0 +1,413 @@
+{
+  "meta": {
+    "title": "Daily Reflection Tree",
+    "version": "1.0",
+    "author": "Harshit Kumar Singh",
+    "format_note": "Deterministic reflection tree with fixed options and no runtime LLM"
+  },
+  "nodes": [
+    {
+      "id": "START",
+      "type": "start",
+      "text": "Good evening. Let’s take a calm look at your day.",
+      "next": "Q_OPEN_1"
+    },
+    {
+      "id": "Q_OPEN_1",
+      "type": "question",
+      "text": "How would you describe the overall feel of your day?",
+      "options": [
+        {
+          "label": "Productive",
+          "signals": ["open_stable"],
+          "next": "D_OPEN"
+        },
+        {
+          "label": "Mixed",
+          "signals": ["open_stable"],
+          "next": "D_OPEN"
+        },
+        {
+          "label": "Frustrating",
+          "signals": ["open_heavy"],
+          "next": "D_OPEN"
+        },
+        {
+          "label": "Heavy",
+          "signals": ["open_heavy"],
+          "next": "D_OPEN"
+        }
+      ]
+    },
+    {
+      "id": "D_OPEN",
+      "type": "decision",
+      "rules": [
+        {
+          "if": "open_heavy >= 1",
+          "next": "R_OPEN_HEAVY"
+        },
+        {
+          "if": "open_stable >= 1",
+          "next": "R_OPEN_STABLE"
+        }
+      ]
+    },
+    {
+      "id": "R_OPEN_STABLE",
+      "type": "reflection",
+      "text": "You seem to be entering this reflection with some steadiness. Let’s use that to look a little deeper at how you moved through the day.",
+      "next": "Q_A1_1"
+    },
+    {
+      "id": "R_OPEN_HEAVY",
+      "type": "reflection",
+      "text": "It sounds like today carried some weight. We won’t try to force a positive spin — just notice how you responded inside it.",
+      "next": "Q_A1_1"
+    },
+    {
+      "id": "Q_A1_1",
+      "type": "question",
+      "text": "When something did not go as planned today, what was your first reaction?",
+      "options": [
+        {
+          "label": "I thought about what I could change",
+          "signals": ["axis1_internal"],
+          "next": "Q_A1_2"
+        },
+        {
+          "label": "I adapted and found another way",
+          "signals": ["axis1_internal"],
+          "next": "Q_A1_2"
+        },
+        {
+          "label": "I felt blocked by things outside my control",
+          "signals": ["axis1_external"],
+          "next": "Q_A1_2"
+        },
+        {
+          "label": "I waited for someone else to fix it",
+          "signals": ["axis1_external"],
+          "next": "Q_A1_2"
+        }
+      ]
+    },
+    {
+      "id": "Q_A1_2",
+      "type": "question",
+      "text": "Which statement fits your day better?",
+      "options": [
+        {
+          "label": "I influenced more than I first realized",
+          "signals": ["axis1_internal"],
+          "next": "Q_A1_3"
+        },
+        {
+          "label": "I had some choices, even in a tough situation",
+          "signals": ["axis1_internal"],
+          "next": "Q_A1_3"
+        },
+        {
+          "label": "Most of today was driven by external pressures",
+          "signals": ["axis1_external"],
+          "next": "Q_A1_3"
+        },
+        {
+          "label": "My day depended mostly on other people",
+          "signals": ["axis1_external"],
+          "next": "Q_A1_3"
+        }
+      ]
+    },
+    {
+      "id": "Q_A1_3",
+      "type": "question",
+      "text": "When you think about your hardest moment today, what feels most true?",
+      "options": [
+        {
+          "label": "I can name one better response for next time",
+          "signals": ["axis1_internal"],
+          "next": "D_A1"
+        },
+        {
+          "label": "I handled what I could and kept moving",
+          "signals": ["axis1_internal"],
+          "next": "D_A1"
+        },
+        {
+          "label": "I was mostly reacting to circumstances",
+          "signals": ["axis1_external"],
+          "next": "D_A1"
+        },
+        {
+          "label": "I had very little room to act",
+          "signals": ["axis1_external"],
+          "next": "D_A1"
+        }
+      ]
+    },
+    {
+      "id": "D_A1",
+      "type": "decision",
+      "rules": [
+        {
+          "if": "axis1_internal >= axis1_external",
+          "next": "R_A1_HIGH"
+        },
+        {
+          "if": "axis1_external > axis1_internal",
+          "next": "R_A1_LOW"
+        }
+      ]
+    },
+    {
+      "id": "R_A1_HIGH",
+      "type": "reflection",
+      "text": "You noticed places where your response mattered. That does not erase a hard day — it shows you still had agency inside it.",
+      "next": "B_A1_A2"
+    },
+    {
+      "id": "R_A1_LOW",
+      "type": "reflection",
+      "text": "A difficult day can pull attention toward what blocked you. Before moving on, it may help to notice even one moment where you still made a choice.",
+      "next": "B_A1_A2"
+    },
+    {
+      "id": "B_A1_A2",
+      "type": "bridge",
+      "text": "Now let’s shift from how you handled the day to what you brought into it.",
+      "next": "Q_A2_1"
+    },
+    {
+      "id": "Q_A2_1",
+      "type": "question",
+      "text": "Think about one interaction you had today. Which feels closest?",
+      "options": [
+        {
+          "label": "I helped move something forward",
+          "signals": ["axis2_contribution"],
+          "next": "Q_A2_2"
+        },
+        {
+          "label": "I supported someone beyond my own task",
+          "signals": ["axis2_contribution"],
+          "next": "Q_A2_2"
+        },
+        {
+          "label": "I felt I deserved more recognition than I got",
+          "signals": ["axis2_entitlement"],
+          "next": "Q_A2_2"
+        },
+        {
+          "label": "I was focused on what others should have done for me",
+          "signals": ["axis2_entitlement"],
+          "next": "Q_A2_2"
+        }
+      ]
+    },
+    {
+      "id": "Q_A2_2",
+      "type": "question",
+      "text": "When you look back on your effort today, what stands out most?",
+      "options": [
+        {
+          "label": "I added value somewhere",
+          "signals": ["axis2_contribution"],
+          "next": "Q_A2_3"
+        },
+        {
+          "label": "I did something useful without being asked",
+          "signals": ["axis2_contribution"],
+          "next": "Q_A2_3"
+        },
+        {
+          "label": "My main frustration was not getting enough credit",
+          "signals": ["axis2_entitlement"],
+          "next": "Q_A2_3"
+        },
+        {
+          "label": "I kept noticing what was missing for me",
+          "signals": ["axis2_entitlement"],
+          "next": "Q_A2_3"
+        }
+      ]
+    },
+    {
+      "id": "Q_A2_3",
+      "type": "question",
+      "text": "What best describes your mindset near the end of the day?",
+      "options": [
+        {
+          "label": "What did I give today?",
+          "signals": ["axis2_contribution"],
+          "next": "D_A2"
+        },
+        {
+          "label": "Where did I make things easier for others?",
+          "signals": ["axis2_contribution"],
+          "next": "D_A2"
+        },
+        {
+          "label": "Why was my effort not recognized more?",
+          "signals": ["axis2_entitlement"],
+          "next": "D_A2"
+        },
+        {
+          "label": "Why do I end up carrying unfair expectations?",
+          "signals": ["axis2_entitlement"],
+          "next": "D_A2"
+        }
+      ]
+    },
+    {
+      "id": "D_A2",
+      "type": "decision",
+      "rules": [
+        {
+          "if": "axis2_contribution >= axis2_entitlement",
+          "next": "R_A2_HIGH"
+        },
+        {
+          "if": "axis2_entitlement > axis2_contribution",
+          "next": "R_A2_LOW"
+        }
+      ]
+    },
+    {
+      "id": "R_A2_HIGH",
+      "type": "reflection",
+      "text": "You seem oriented toward contribution. That usually creates energy because the day is measured not only by what you received, but by what you added.",
+      "next": "B_A2_A3"
+    },
+    {
+      "id": "R_A2_LOW",
+      "type": "reflection",
+      "text": "When a day feels unfair, attention can narrow around what was missing. A useful reset is to ask where you still contributed, even if it went unnoticed.",
+      "next": "B_A2_A3"
+    },
+    {
+      "id": "B_A2_A3",
+      "type": "bridge",
+      "text": "Let’s widen the lens now — from your effort to who else was affected by today.",
+      "next": "Q_A3_1"
+    },
+    {
+      "id": "Q_A3_1",
+      "type": "question",
+      "text": "When you think about today’s biggest challenge, who comes to mind first?",
+      "options": [
+        {
+          "label": "Mostly me and my workload",
+          "signals": ["axis3_self"],
+          "next": "Q_A3_2"
+        },
+        {
+          "label": "Me, but also how it affected my team",
+          "signals": ["axis3_wider"],
+          "next": "Q_A3_2"
+        },
+        {
+          "label": "A colleague who may have been impacted",
+          "signals": ["axis3_wider"],
+          "next": "Q_A3_2"
+        },
+        {
+          "label": "The customer or end user behind the work",
+          "signals": ["axis3_wider"],
+          "next": "Q_A3_2"
+        }
+      ]
+    },
+    {
+      "id": "Q_A3_2",
+      "type": "question",
+      "text": "What felt most important by the end of the day?",
+      "options": [
+        {
+          "label": "Getting through my own pressure",
+          "signals": ["axis3_self"],
+          "next": "Q_A3_3"
+        },
+        {
+          "label": "Balancing my needs with the team’s needs",
+          "signals": ["axis3_wider"],
+          "next": "Q_A3_3"
+        },
+        {
+          "label": "Supporting someone else who was struggling",
+          "signals": ["axis3_wider"],
+          "next": "Q_A3_3"
+        },
+        {
+          "label": "Making sure the work served its larger purpose",
+          "signals": ["axis3_wider"],
+          "next": "Q_A3_3"
+        }
+      ]
+    },
+    {
+      "id": "Q_A3_3",
+      "type": "question",
+      "text": "When you replay today in your head, what frame feels most natural?",
+      "options": [
+        {
+          "label": "My stress, my tasks, my deadlines",
+          "signals": ["axis3_self"],
+          "next": "D_A3"
+        },
+        {
+          "label": "Our team’s progress and constraints",
+          "signals": ["axis3_wider"],
+          "next": "D_A3"
+        },
+        {
+          "label": "One other person’s experience matters here too",
+          "signals": ["axis3_wider"],
+          "next": "D_A3"
+        },
+        {
+          "label": "The wider mission or people we serve matter most",
+          "signals": ["axis3_wider"],
+          "next": "D_A3"
+        }
+      ]
+    },
+    {
+      "id": "D_A3",
+      "type": "decision",
+      "rules": [
+        {
+          "if": "axis3_wider >= axis3_self",
+          "next": "R_A3_HIGH"
+        },
+        {
+          "if": "axis3_self > axis3_wider",
+          "next": "R_A3_LOW"
+        }
+      ]
+    },
+    {
+      "id": "R_A3_HIGH",
+      "type": "reflection",
+      "text": "You widened beyond your own pressure and saw other people in the picture. That often makes work feel more meaningful, not just more demanding.",
+      "next": "SUMMARY"
+    },
+    {
+      "id": "R_A3_LOW",
+      "type": "reflection",
+      "text": "Stress naturally narrows attention toward the self. The next step is not to ignore your burden — it is to remember the larger circle around it.",
+      "next": "SUMMARY"
+    },
+    {
+      "id": "SUMMARY",
+      "type": "summary",
+      "text": "Today’s reflection suggests a pattern in three areas: agency, contribution, and radius of concern. The pattern does not define you — it shows where your attention went today, and what may be worth noticing tomorrow.",
+      "next": "END"
+    },
+    {
+      "id": "END",
+      "type": "end",
+      "text": "Thanks for reflecting. See you tomorrow."
+    }
+  ]
+}
